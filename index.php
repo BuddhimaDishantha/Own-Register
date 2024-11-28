@@ -1,3 +1,6 @@
+<?php
+ include("Database.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +13,7 @@
 </head>
 <body>
     <div class="container">
-       <form action="#" method="post">
+       <form action="<?php $_SERVER["PHP_SELF"] ?>" method="post">
         <h1>Register</h1>
 
         <div class="input-filed">
@@ -30,6 +33,25 @@
 
         <input type="submit" value="Register" id="Register" name="Register">
         </form>
+        
     </div>
+    <br>
+    <?php
+    if($_SERVER["REQUEST_METHOD"]=="POST"){
+        $uname=$_POST["uname"];
+        $email=$_POST["email"];
+        $password=password_hash($_POST["password"],PASSWORD_DEFAULT);
+        $sql="INSERT INTO login_details(User_name,email,password)
+              VALUES('$uname','$email','$password')";
+        try{
+        mysqli_query($conn,$sql);
+        header("Location:index2.html");
+       }
+       catch(mysqli_sql_exception){
+        echo "Can not insert data to the database";
+       }
+    }
+    mysqli_close($conn);
+    ?>
 </body>
 </html>
